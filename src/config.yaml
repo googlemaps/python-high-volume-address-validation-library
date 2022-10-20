@@ -1,0 +1,51 @@
+# Copyright 2022 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+## Location of the address file
+address_file : './tests/JB-hunt-for-AV.csv'
+
+## Provide the columns which needs to be concatenated to get the address
+# column_numbers : [3,4,5,6,7]
+column_numbers : [1,2,3,4]
+
+supplied_primary_key : 0
+
+## Shelse db file
+shelve_db : 'addresses'
+
+## Set the separator in the file with which to create the final address
+separator : ' '
+
+## API KEY
+api_key : AIzaSyBPPLphlQbdRLzAVHo6_9-0HrsTmgKQLUQ
+
+## Name of the output csv file
+output_csv : './JBHunt-output.csv'
+
+## Directory where to look for the db files
+directory : "./"
+
+## There are three modes for running the software.
+run_mode : 1
+
+#  Test Mode: 1
+#  Production mode -NoUsers: 2
+#  Production mode -Users: 3
+
+## Can output either csv or json
+# Values to be set are either csv or json
+output_format: csv
+
+# Configure the columns to output
+output_columns: ['inputAddress', 'validationGranularity', 'formattedAddress', 'geocodeGranularity', 'placeId', 'latitude', 'longitude']
