@@ -6,7 +6,20 @@
 
 This program is a wrapper around [Address Validation API](https://developers.google.com/maps/documentation/address-validation) enabling it to be processed in high volume which can be useful for many scenarios. 
 
-The program takes a `csv` file. It then uses the API key configured in config.yaml to start the processing of the addresses. An example of config.yaml is as below:
+
+![High-Level-overview](https://developers.devsite.corp.google.com/static/maps/architecture/design-patterns-high-volume-address-validation/images/software-arch-high-volume-address-validation.svg)
+
+The program takes a `csv` file. It then uses the API key configured in config.yaml to start the processing of the addresses. 
+
+## Authentication
+
+You will need an API Key to call the Address Validation API.
+[Generate your API](https://developers.google.com/maps/get-started#api-key) key by following instructions here.
+   
+
+
+
+An example of config.yaml is as below:
 
 ```
 # Location of the address file
@@ -22,7 +35,7 @@ The `csv` file can have either the address in one single column or it can be spl
 
 ## Flow
 
-* Reads `csv` file
+* Reads a `csv` file
 * Constructs the address as per configuration
 * Stores the formatted addresses in a `shelve` object. This is done to make the program more resilient and async.
 * It then picks up addresses one by one from the `shelve` object and call the Address Validation API
@@ -99,3 +112,7 @@ The `csv` file can have either the address in one single column or it can be spl
   ```
   run_mode : 2
   ```
+
+## Output
+
+  This program outputs a CSV file. Based on the mode selected above, the contents of the CSV file changes.
