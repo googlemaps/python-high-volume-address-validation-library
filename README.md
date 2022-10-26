@@ -7,7 +7,7 @@
 This program is a wrapper around [Address Validation API](https://developers.google.com/maps/documentation/address-validation) enabling it to be processed in high volume which can be useful for many scenarios. 
 
 
-![High-Level-overview](/doc_imaages/High-Volume-Address-Validation-overview.png)
+![High-Level-overview](/doc_images/High-Volume-Address-Validation-overview.png)
 
 The program takes a `csv` file. It then uses the API key configured in config.yaml to start the processing of the addresses. 
 
@@ -42,7 +42,7 @@ You will need an API Key to call the Address Validation API.
 
 The program ships with a config.yaml file using which several parameters of the library can be tweaked.
 
-*** Location of the address file ***
+***Location of the address file***
 ```
 address_file : './tests/addresses.csv'   
 ```
