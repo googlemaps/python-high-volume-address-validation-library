@@ -47,19 +47,20 @@ The program ships with a config.yaml file using which several parameters of the 
 address_file : './tests/addresses.csv'   
 ```
 ***Address fields***
-The `csv` file can have either the address in one single column or it can be split across multiple columns like [house number, street name, zipcode, city, state] using this property. In the following field configure all the columns which constituate the
+The csv file can have either the address in one single column or it can be split across multiple columns like [house number, street name, zipcode, city, state] using this property. In the following field configure all the columns which constituate the
 address and the program will construct the address by concattinating the fields.
 
 ```
    Provide the columns which needs to be concatinated to get the address column_numbers eg [3,4,5,6,7]  
 ```
 
+***Advanced configurations***
+
 ***Separator***
 
 Set the separator in the file with which to create the final address
 separator : ","  
 
-***Other elements***
 
 Shelve db file: This is a temporary file created to maintain persistance for a long runninng process.
 ```shelve_db : addresses ```
