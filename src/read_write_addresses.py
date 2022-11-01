@@ -21,8 +21,8 @@ import shelve
 #from config_loader import config
 import config_loader
 
-global globalDuplicateCounter
-globalDuplicateCounter={}
+global global_duplicate_counter
+global_duplicate_counter={}
 
 config =config_loader.Config()
 
@@ -39,7 +39,7 @@ class read_write_addressess_class:
         self.column_numbers = config.column_numbers
         self.address_file = config.address_file
         self.address_datastore = shelve.open(config.shelve_db, 'n')
-        self.mySeparator = config.separator
+        self.separator = config.separator
         self.address_datastore.clear()
 
 #
@@ -62,7 +62,7 @@ class read_write_addressess_class:
             if (index < len(self.column_numbers)-1):
                # print("len is "+str(len(self.column_numbers)))
                 #print("index is "+str(index))
-                current_row+=str(row[column])+self.mySeparator
+                current_row+=str(row[column])+self.separator
                 #print("current row is "+str(current_row))
             
             else:  
@@ -112,24 +112,24 @@ class read_write_addressess_class:
        
         #try:
        # print("Hereeeee")
-        currentAddressCounter=int()
+        current_address_counter=int()
         
         if final_address in self.address_datastore:
             print("Insside first big IF ############### If ")
            
-            if final_address in globalDuplicateCounter:
+            if final_address in global_duplicate_counter:
                 print("############### Address already exiss",final_address)
-                currentAddressCounter = globalDuplicateCounter[final_address]
-                nextCounter=currentAddressCounter+1
-                globalDuplicateCounter[final_address] = nextCounter
+                current_address_counter = global_duplicate_counter[final_address]
+                nextCounter=current_address_counter+1
+                global_duplicate_counter[final_address] = nextCounter
                 print("Counter for ",final_address," is ",nextCounter)
             else:
-                globalDuplicateCounter[final_address] = 1
-                print("The counter for ", final_address,"is ::",currentAddressCounter)
+                global_duplicate_counter[final_address] = 1
+                print("The counter for ", final_address,"is ::",current_address_counter)
             
         else:
             print("In else block inserting ",final_address,"to DS and to dict")
-            globalDuplicateCounter[final_address] = 1
+            global_duplicate_counter[final_address] = 1
             self.address_datastore[final_address]={"Nothing"}
 
     # 
