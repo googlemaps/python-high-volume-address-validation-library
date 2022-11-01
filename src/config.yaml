@@ -31,7 +31,7 @@ separator : ' '
 api_key : AIzaSyBPPLphlQbdRLzAVHo6_9-0HrsTmgKQLUQ
 
 ## Name of the output csv file
-output_csv : './JBHunt-output.csv'
+output_csv : './output.csv'
 
 ## Directory where to look for the db files
 directory : "./"
