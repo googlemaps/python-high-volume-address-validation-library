@@ -66,7 +66,7 @@ class HighVolumeAVMain:
     #
 
 
-    def callAVApi():
+    def parse_av_response():
         #
         # Call addressvalidation API with the addresses from shelves to validate the addresses
         # After validation store the address back in the shelve store
@@ -75,12 +75,12 @@ class HighVolumeAVMain:
         with shelve.open(config.shelve_db, 'c') as address_datastore:
         
             for key in address_datastore:
-                addressvalidation_result = gmaps.addressvalidation(key)
-                parsed_response=av_result_parser_load.av_parse(addressvalidation_result)
+                address_validation_result = gmaps.addressvalidation(key)
+                parsed_response=av_result_parser_load.parse_av_response(address_validation_result)
                 address_datastore[key] = parsed_response
         return True
 
-    def createExportCSV():
+    def create_export_csv():
         # 
         # open the file in the write mode
         # read the shelve file
@@ -93,11 +93,11 @@ class HighVolumeAVMain:
             header = config.output_columns
     
             csvWriter.writerow(header)
-            with shelve.open(config.shelve_db) as addressShelve:
+            with shelve.open(config.shelve_db) as address_shelve:
                 
                 print("===================================================")
-               # print(json.dumps(dict(addressShelve), indent =4 ))
-                for address in addressShelve.keys():
+               # print(json.dumps(dict(address_shelve), indent =4 ))
+                for address in address_shelve.keys():
 
                     print("The address going to be inserted in the csv is "+str(address))
 
@@ -112,8 +112,8 @@ class HighVolumeAVMain:
                         if h == 'inputAddress':
                             continue
                         #Check to see if the relevent data exists in the shelf file
-                        if h in addressShelve[address]:
-                            data.append(addressShelve[address][h])
+                        if h in address_shelve[address]:
+                            data.append(address_shelve[address][h])
                         else:
                         #If not, write a blank cell
                             data.append('')
@@ -129,26 +129,26 @@ class HighVolumeAVMain:
         # store the content back as JSON
         #
 
-        with open(config.output_csv, 'w') as outputCSV:
-            csvWriter = csv.writer(outputCSV)
+        with open(config.output_csv, 'w') as output_csv:
+            csvWriter = csv.writer(output_csv)
 
             #Write the CSV headers to the file
            # header = ['inputAddress', 'inputGranularity', 'validationGranularity', 'geocodeGranularity', 'addressComplete', 'hasUnconfirmedComponents', 'hasInferredComponents', 'hasReplacedComponents', 'placeId', 'spellCorrected']
            # csvWriter.writerow(header)
-            with shelve.open(config.shelve_db) as addressShelve:
+            with shelve.open(config.shelve_db) as address_shelve:
                 
                 print("===================================================")
-                outputJson=json.dumps(dict(addressShelve), indent =4 )
+                outputJson=json.dumps(dict(address_shelve), indent =4 )
                 return outputJson
                 #print (outputJson)   
 
-    def printDuplication():
+    def print_duplication():
         with open('duplicationReport.csv', 'w') as f:
-                    for key in read_write_addresses.globalDuplicateCounter.keys():
-                        f.write("%s,%s\n"%(key,read_write_addresses.globalDuplicateCounter[key]))
+                    for key in read_write_addresses.global_duplicate_counter.keys():
+                        f.write("%s,%s\n"%(key,read_write_addresses.global_duplicate_counter[key]))
 
-       # for key, value in read_write_addresses.globalDuplicateCounter.items():
-           # if read_write_addresses.globalDuplicateCounter[x] !=1:
+       # for key, value in read_write_addresses.global_duplicate_counter.items():
+           # if read_write_addresses.global_duplicate_counter[x] !=1:
           #  print(key, ' : ', value)
                
 
@@ -177,15 +177,15 @@ class HighVolumeAVMain:
 #   
 
 try:
-    (HighVolumeAVMain.readAndStoreAddresses() and HighVolumeAVMain.callAVApi())
+    (HighVolumeAVMain.read_and_Store_Addresses() and HighVolumeAVMain.parse_av_response())
     if config.output_format== "csv":
 
-        HighVolumeAVMain.createExportCSV()
+        HighVolumeAVMain.create_export_csv()
 
     elif config.output_format== "json":
         HighVolumeAVMain.createExportJSON()
     
-    HighVolumeAVMain.printDuplication()
+    HighVolumeAVMain.print_duplication()
     HighVolumeAVMain.teardown()
 
 except Exception as er:

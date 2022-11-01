@@ -13,14 +13,14 @@
 # limitations under the License.
 
 import csv
-#from config_loader import config
+
 import config_loader
 
 config =config_loader.Config()
 
 class av_result_parser_class:
 
-    def av_parse(self, addressvalidation_result):
+    def parse_av_response(self, address_validation_result):
         #print(addressvalidation_result)
         """_summary_
 
@@ -33,157 +33,157 @@ class av_result_parser_class:
 
         run_mode = config.run_mode
 
-        parsedResult = dict()
+        parsed_result = dict()
         # Check to see if Response object contains top level result component
-        if "result" in addressvalidation_result:
+        if "result" in address_validation_result:
             # Check to see if result component contains verdict. Verdict contains the overall quality indicators, and should always be stored
-            if "verdict" in addressvalidation_result["result"]:
-                for k in addressvalidation_result["result"]["verdict"].keys():
-                    parsedResult[k] = addressvalidation_result["result"]["verdict"][k]
+            if "verdict" in address_validation_result["result"]:
+                for k in address_validation_result["result"]["verdict"].keys():
+                    parsed_result[k] = address_validation_result["result"]["verdict"][k]
 
             #    
             # If running in test mode, allow the application to store some data to understand Address Validation API response     
             # 
             if run_mode == 1:
-                if "address" in addressvalidation_result["result"]:
-                    if "formattedAddress" in addressvalidation_result["result"]["address"]:
-                        parsedResult["formattedAddress"] = addressvalidation_result["result"]["address"]["formattedAddress"]
+                if "address" in address_validation_result["result"]:
+                    if "formattedAddress" in address_validation_result["result"]["address"]:
+                        parsed_result["formattedAddress"] = address_validation_result["result"]["address"]["formattedAddress"]
 
-                    if "postalAddress" in addressvalidation_result["result"]["address"]:
-                        for k in addressvalidation_result["result"]["address"]["postalAddress"]:
+                    if "postalAddress" in address_validation_result["result"]["address"]:
+                        for k in address_validation_result["result"]["address"]["postalAddress"]:
                             if k == "addressLines":
                                 addressLineCounter = 1
-                                for al in addressvalidation_result["result"]["address"]["postalAddress"][k]:
-                                    parsedResult["addressLine" + str(addressLineCounter)] = al
+                                for al in address_validation_result["result"]["address"]["postalAddress"][k]:
+                                    parsed_result["addressLine" + str(addressLineCounter)] = al
                                     addressLineCounter += 1
                                 continue
-                            parsedResult[k] = addressvalidation_result["result"]["address"]["postalAddress"][k]
-                if "geocode" in addressvalidation_result["result"]:
+                            parsed_result[k] = address_validation_result["result"]["address"]["postalAddress"][k]
+                if "geocode" in address_validation_result["result"]:
                     # Always store the Place ID
-                    if "placeId" in addressvalidation_result["result"]["geocode"]:
-                        parsedResult["placeId"] = addressvalidation_result["result"]["geocode"]["placeId"]
+                    if "placeId" in address_validation_result["result"]["geocode"]:
+                        parsed_result["placeId"] = address_validation_result["result"]["geocode"]["placeId"]
                     
                     if run_mode == 1:
                         # Only store the lat/lng if running in test mode 
-                        if "location" in addressvalidation_result["result"]["geocode"]:
-                            if "latitude" in addressvalidation_result["result"]["geocode"]["location"]:
-                                parsedResult["latitude"] = addressvalidation_result["result"]["geocode"]["location"]["latitude"]
-                            if "longitude" in addressvalidation_result["result"]["geocode"]["location"]:
-                                parsedResult["longitude"] = addressvalidation_result["result"]["geocode"]["location"]["longitude"]
+                        if "location" in address_validation_result["result"]["geocode"]:
+                            if "latitude" in address_validation_result["result"]["geocode"]["location"]:
+                                parsed_result["latitude"] = address_validation_result["result"]["geocode"]["location"]["latitude"]
+                            if "longitude" in address_validation_result["result"]["geocode"]["location"]:
+                                parsed_result["longitude"] = address_validation_result["result"]["geocode"]["location"]["longitude"]
                 # [USA Only] Store additional addresss metadata
-                if "metadata" in addressvalidation_result["result"]:
-                    for k in addressvalidation_result["result"]["metadata"].keys():
-                        parsedResult[k] = addressvalidation_result["result"]["metadata"][k]
+                if "metadata" in address_validation_result["result"]:
+                    for k in address_validation_result["result"]["metadata"].keys():
+                        parsed_result[k] = address_validation_result["result"]["metadata"][k]
                 # [USA Only] Check to see if uspsData componant exists
-                if "uspsData" in addressvalidation_result["result"]:
-                    for k in addressvalidation_result["result"]["uspsData"].keys():
+                if "uspsData" in address_validation_result["result"]:
+                    for k in address_validation_result["result"]["uspsData"].keys():
                     # [USA Only] Store the postal service standardized address
                         if k == "standardizedAddress":
-                            for sa in addressvalidation_result["result"]["uspsData"]["standardizedAddress"].keys():
-                                parsedResult[sa] = addressvalidation_result["result"]["uspsData"]["standardizedAddress"][sa]
+                            for sa in address_validation_result["result"]["uspsData"]["standardizedAddress"].keys():
+                                parsed_result[sa] = address_validation_result["result"]["uspsData"]["standardizedAddress"][sa]
                             continue
                         # [USA Only] Store the USPS data
-                        parsedResult[k] = addressvalidation_result["result"]["uspsData"][k]
+                        parsed_result[k] = address_validation_result["result"]["uspsData"][k]
 
             #    
             # If running in Production mode -NoUsers, allow the application to ONLY store formatted address, Place ID, verdict
             # 
             if run_mode == 2:
-                if "address" in addressvalidation_result["result"]:
-                    if "formattedAddress" in addressvalidation_result["result"]["address"]:
-                        parsedResult["formattedAddress"] = addressvalidation_result["result"]["address"]["formattedAddress"]
+                if "address" in address_validation_result["result"]:
+                    if "formattedAddress" in address_validation_result["result"]["address"]:
+                        parsed_result["formattedAddress"] = address_validation_result["result"]["address"]["formattedAddress"]
 
-                    if "postalAddress" in addressvalidation_result["result"]["address"]:
-                        for k in addressvalidation_result["result"]["address"]["postalAddress"]:
+                    if "postalAddress" in address_validation_result["result"]["address"]:
+                        for k in address_validation_result["result"]["address"]["postalAddress"]:
                             if k == "addressLines":
                                 addressLineCounter = 1
-                                for al in addressvalidation_result["result"]["address"]["postalAddress"][k]:
-                                    parsedResult["addressLine" + str(addressLineCounter)] = al
+                                for al in address_validation_result["result"]["address"]["postalAddress"][k]:
+                                    parsed_result["addressLine" + str(addressLineCounter)] = al
                                     addressLineCounter += 1
                                 continue
-                            parsedResult[k] = addressvalidation_result["result"]["address"]["postalAddress"][k]
-                if "geocode" in addressvalidation_result["result"]:
+                            parsed_result[k] = address_validation_result["result"]["address"]["postalAddress"][k]
+                if "geocode" in address_validation_result["result"]:
                     # Always store the Place ID
-                    if "placeId" in addressvalidation_result["result"]["geocode"]:
-                        parsedResult["placeId"] = addressvalidation_result["result"]["geocode"]["placeId"]
+                    if "placeId" in address_validation_result["result"]["geocode"]:
+                        parsed_result["placeId"] = address_validation_result["result"]["geocode"]["placeId"]
                     
                     if run_mode == 2:
                         # Only store the lat/lng if running in test mode 
-                        if "location" in addressvalidation_result["result"]["geocode"]:
-                            if "latitude" in addressvalidation_result["result"]["geocode"]["location"]:
-                                parsedResult["latitude"] = addressvalidation_result["result"]["geocode"]["location"]["latitude"]
-                            if "longitude" in addressvalidation_result["result"]["geocode"]["location"]:
-                                parsedResult["longitude"] = addressvalidation_result["result"]["geocode"]["location"]["longitude"]
+                        if "location" in address_validation_result["result"]["geocode"]:
+                            if "latitude" in address_validation_result["result"]["geocode"]["location"]:
+                                parsed_result["latitude"] = address_validation_result["result"]["geocode"]["location"]["latitude"]
+                            if "longitude" in address_validation_result["result"]["geocode"]["location"]:
+                                parsed_result["longitude"] = address_validation_result["result"]["geocode"]["location"]["longitude"]
                 # [USA Only] Store additional addresss metadata
-                if "metadata" in addressvalidation_result["result"]:
-                    for k in addressvalidation_result["result"]["metadata"].keys():
-                        parsedResult[k] = addressvalidation_result["result"]["metadata"][k]
+                if "metadata" in address_validation_result["result"]:
+                    for k in address_validation_result["result"]["metadata"].keys():
+                        parsed_result[k] = address_validation_result["result"]["metadata"][k]
                 # [USA Only] Check to see if uspsData componant exists
-                if "uspsData" in addressvalidation_result["result"]:
-                    for k in addressvalidation_result["result"]["uspsData"].keys():
+                if "uspsData" in address_validation_result["result"]:
+                    for k in address_validation_result["result"]["uspsData"].keys():
                     # [USA Only] Store the postal service standardized address
                         if k == "standardizedAddress":
-                            for sa in addressvalidation_result["result"]["uspsData"]["standardizedAddress"].keys():
-                                parsedResult[sa] = addressvalidation_result["result"]["uspsData"]["standardizedAddress"][sa]
+                            for sa in address_validation_result["result"]["uspsData"]["standardizedAddress"].keys():
+                                parsed_result[sa] = address_validation_result["result"]["uspsData"]["standardizedAddress"][sa]
                             continue
                         # [USA Only] Store the USPS data
-                        parsedResult[k] = addressvalidation_result["result"]["uspsData"][k]
+                        parsed_result[k] = address_validation_result["result"]["uspsData"][k]
 
 
             #    
             # If running in Production mode -Users, allow the application to store formatted address, Place ID, verdict, address components spell correction
             # 
             if run_mode == 3:
-                if "address" in addressvalidation_result["result"]:
-                    if "formattedAddress" in addressvalidation_result["result"]["address"]:
-                        parsedResult["formattedAddress"] = addressvalidation_result["result"]["address"]["formattedAddress"]
+                if "address" in address_validation_result["result"]:
+                    if "formattedAddress" in address_validation_result["result"]["address"]:
+                        parsed_result["formattedAddress"] = address_validation_result["result"]["address"]["formattedAddress"]
 
                     # Spell correction flag
-                    if "addressComponents" in addressvalidation_result["result"]["address"]:
-                        for x in addressvalidation_result["result"]["address"]["addressComponents"]:
+                    if "addressComponents" in address_validation_result["result"]["address"]:
+                        for x in address_validation_result["result"]["address"]["addressComponents"]:
                             for sc in x:
                                 # print(sc)
                                 if sc == "spellCorrected":
                                     # print("####################################addressComponents")
-                                    parsedResult["spellCorrected"] = x[sc]
+                                    parsed_result["spellCorrected"] = x[sc]
                             #         print("spellCorrected")
 
-                    if "postalAddress" in addressvalidation_result["result"]["address"]:
-                        for k in addressvalidation_result["result"]["address"]["postalAddress"]:
+                    if "postalAddress" in address_validation_result["result"]["address"]:
+                        for k in address_validation_result["result"]["address"]["postalAddress"]:
                             if k == "addressLines":
                                 addressLineCounter = 1
-                                for al in addressvalidation_result["result"]["address"]["postalAddress"][k]:
-                                    parsedResult["addressLine" + str(addressLineCounter)] = al
+                                for al in address_validation_result["result"]["address"]["postalAddress"][k]:
+                                    parsed_result["addressLine" + str(addressLineCounter)] = al
                                     addressLineCounter += 1
                                 continue
-                            parsedResult[k] = addressvalidation_result["result"]["address"]["postalAddress"][k]
-                if "geocode" in addressvalidation_result["result"]:
+                            parsed_result[k] = address_validation_result["result"]["address"]["postalAddress"][k]
+                if "geocode" in address_validation_result["result"]:
                     # Always store the Place ID
-                    if "placeId" in addressvalidation_result["result"]["geocode"]:
-                        parsedResult["placeId"] = addressvalidation_result["result"]["geocode"]["placeId"]
+                    if "placeId" in address_validation_result["result"]["geocode"]:
+                        parsed_result["placeId"] = address_validation_result["result"]["geocode"]["placeId"]
                     
                     if run_mode == 3:
                         # Only store the lat/lng if running in test mode 
-                        if "location" in addressvalidation_result["result"]["geocode"]:
-                            if "latitude" in addressvalidation_result["result"]["geocode"]["location"]:
-                                parsedResult["latitude"] = addressvalidation_result["result"]["geocode"]["location"]["latitude"]
-                            if "longitude" in addressvalidation_result["result"]["geocode"]["location"]:
-                                parsedResult["longitude"] = addressvalidation_result["result"]["geocode"]["location"]["longitude"]
+                        if "location" in address_validation_result["result"]["geocode"]:
+                            if "latitude" in address_validation_result["result"]["geocode"]["location"]:
+                                parsed_result["latitude"] = address_validation_result["result"]["geocode"]["location"]["latitude"]
+                            if "longitude" in address_validation_result["result"]["geocode"]["location"]:
+                                parsed_result["longitude"] = address_validation_result["result"]["geocode"]["location"]["longitude"]
                 # [USA Only] Store additional addresss metadata
-                if "metadata" in addressvalidation_result["result"]:
-                    for k in addressvalidation_result["result"]["metadata"].keys():
-                        parsedResult[k] = addressvalidation_result["result"]["metadata"][k]
+                if "metadata" in address_validation_result["result"]:
+                    for k in address_validation_result["result"]["metadata"].keys():
+                        parsed_result[k] = address_validation_result["result"]["metadata"][k]
                 # [USA Only] Check to see if uspsData componant exists
-                if "uspsData" in addressvalidation_result["result"]:
-                    for k in addressvalidation_result["result"]["uspsData"].keys():
+                if "uspsData" in address_validation_result["result"]:
+                    for k in address_validation_result["result"]["uspsData"].keys():
                     # [USA Only] Store the postal service standardized address
                         if k == "standardizedAddress":
-                            for sa in addressvalidation_result["result"]["uspsData"]["standardizedAddress"].keys():
-                                parsedResult[sa] = addressvalidation_result["result"]["uspsData"]["standardizedAddress"][sa]
+                            for sa in address_validation_result["result"]["uspsData"]["standardizedAddress"].keys():
+                                parsed_result[sa] = address_validation_result["result"]["uspsData"]["standardizedAddress"][sa]
                             continue
                         # [USA Only] Store the USPS data
-                        parsedResult[k] = addressvalidation_result["result"]["uspsData"][k]
+                        parsed_result[k] = address_validation_result["result"]["uspsData"][k]
 
         print("The dict with all the extracted elemnts is ready")
-        print(parsedResult)
-        return parsedResult
+        print(parsed_result)
+        return parsed_result
