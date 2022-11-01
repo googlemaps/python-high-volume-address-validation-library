@@ -17,7 +17,7 @@ api = Api(app)
 port = 5100
 
 config =config_loader.Config()
-Create a client of the googleMaps client library
+#Create a client of the googleMaps client library
 
 gmaps = googlemaps.Client(key=config.api_key)
 
