@@ -21,7 +21,7 @@ config =config_loader.Config()
 class av_result_parser_class:
 
     def parse_av_response(self, address_validation_result):
-        #print(addressvalidation_result)
+
         """_summary_
 
         Args:
@@ -32,26 +32,31 @@ class av_result_parser_class:
         """        
 
         run_mode = config.run_mode
-
+        #Dict to store the parsed result
         parsed_result = dict()
         # Check to see if Response object contains top level result component
         if "result" in address_validation_result:
             # Check to see if result component contains verdict. Verdict contains the overall quality indicators, and should always be stored
             if "verdict" in address_validation_result["result"]:
+                #Loop through the result object and add componens to the parsed result dict 
                 for k in address_validation_result["result"]["verdict"].keys():
                     parsed_result[k] = address_validation_result["result"]["verdict"][k]
 
             #    
-            # If running in test mode, allow the application to store some data to understand Address Validation API response     
+            # If running in test mode (run mode 1), allow the application to store some data to understand Address Validation API response     
             # 
             if run_mode == 1:
+                #Check to see if the address ovject is within the result
                 if "address" in address_validation_result["result"]:
+                    #Add the formatted address to the parsed result dict
                     if "formattedAddress" in address_validation_result["result"]["address"]:
                         parsed_result["formattedAddress"] = address_validation_result["result"]["address"]["formattedAddress"]
-
+                    #Check to see if the address lines are in the address objet
                     if "postalAddress" in address_validation_result["result"]["address"]:
+                        #Loop through the address lines and add to the parsed result dict
                         for k in address_validation_result["result"]["address"]["postalAddress"]:
                             if k == "addressLines":
+                                #There can be n number of address lines. Loop though adn add these to the parsed result dict
                                 addressLineCounter = 1
                                 for al in address_validation_result["result"]["address"]["postalAddress"][k]:
                                     parsed_result["addressLine" + str(addressLineCounter)] = al
@@ -64,7 +69,7 @@ class av_result_parser_class:
                         parsed_result["placeId"] = address_validation_result["result"]["geocode"]["placeId"]
                     
                     if run_mode == 1:
-                        # Only store the lat/lng if running in test mode 
+                        # Only store the lat/lng if running in test mode (run mode 1)
                         if "location" in address_validation_result["result"]["geocode"]:
                             if "latitude" in address_validation_result["result"]["geocode"]["location"]:
                                 parsed_result["latitude"] = address_validation_result["result"]["geocode"]["location"]["latitude"]
