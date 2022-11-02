@@ -47,7 +47,7 @@ av_result_parser_load=av_result_parser_class()
 
 class HighVolumeAVMain: 
 
-    def readAndStoreAddresses():
+    def read_and_store_addresses():
     # Read the csv file, parse it, construct the addresses
     # Insert the addresses in the persistant shelve object
         try:
@@ -177,7 +177,7 @@ class HighVolumeAVMain:
 #   
 
 try:
-    (HighVolumeAVMain.read_and_Store_Addresses() and HighVolumeAVMain.parse_av_response())
+    (HighVolumeAVMain.read_and_store_addresses() and HighVolumeAVMain.parse_av_response())
     if config.output_format== "csv":
 
         HighVolumeAVMain.create_export_csv()
