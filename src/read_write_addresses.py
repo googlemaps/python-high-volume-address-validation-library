@@ -56,7 +56,7 @@ class read_write_addressess_class:
         for index,column in enumerate(self.column_numbers):
             
             # we want to ensure we are not putting the separator at the end of the string
-            #So here we are checking if it is the last element of the row and if yes, do 
+            # So here we are checking if it is the last element of the row and if yes, do 
             # not add the separtor at the end
 
             if (index < len(self.column_numbers)-1):
