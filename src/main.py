@@ -57,7 +57,7 @@ class HighVolumeAVMain:
         except IndexError as ie:
             print(ie)
             print('Bad row reading csv')
-    
+    K
 
     #
     # This functions checks if the load in the shelve object is accurate or not
@@ -132,7 +132,7 @@ class HighVolumeAVMain:
         with open(config.output_csv, 'w') as output_csv:
             csvWriter = csv.writer(output_csv)
 
-            #Write the CSV headers to the file
+        #TODO: Write the CSV headers to the file
            # header = ['inputAddress', 'inputGranularity', 'validationGranularity', 'geocodeGranularity', 'addressComplete', 'hasUnconfirmedComponents', 'hasInferredComponents', 'hasReplacedComponents', 'placeId', 'spellCorrected']
            # csvWriter.writerow(header)
             with shelve.open(config.shelve_db) as address_shelve:
