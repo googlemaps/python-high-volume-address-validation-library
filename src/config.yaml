@@ -37,7 +37,7 @@ output_csv : './output.csv'
 directory : "./"
 
 ## There are three modes for running the software.
-run_mode : 1
+run_mode : 3
 
 #  Test Mode: 1
 #  Production mode -NoUsers: 2

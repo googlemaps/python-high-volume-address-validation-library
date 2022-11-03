@@ -14,6 +14,8 @@
 
 #config_loader.py
 from fileinput import filename
+import os
+import sys
 import yaml
 import argparse
 
@@ -35,7 +37,7 @@ class Config:
             self.load_yaml(config_file)
             #self.load_yaml(test_config_file)    
         else:
-            self.load_yaml(_DEFAULT_CONFIG_FILE)
+            self.load_yaml(os.path.join(sys.path[0],_DEFAULT_CONFIG_FILE))
 
    #load config yaml     
     def load_yaml(self,file_path):
