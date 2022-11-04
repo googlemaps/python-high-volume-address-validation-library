@@ -49,22 +49,22 @@ class av_result_parser_class:
         parsed_result = dict()
 
         if run_mode == 1:
-                
-            #Check to see if the address object is within the result 
-            #Add the formatted address to the parsed result dict   
-            #Check to see if the address lines are in the address objet
-    
+           #Most permissive mode. Only for testing
+           #      
             parsed_result["output_place_ID"]=av_result_parser_class.get_place_ID(address_validation_result,parsed_result)
             parsed_result["output_latlong"]=av_result_parser_class.get_latlong(address_validation_result,parsed_result)
-            address_metadata["output_formatted_address"]=av_result_parser_class.get_formatted_address(address_validation_result,parsed_result)
+            parsed_result["output_formatted_address"]=av_result_parser_class.get_formatted_address(address_validation_result,parsed_result)
             parsed_result["output_address_metadata"]=av_result_parser_class.get_address_metadata(address_validation_result,parsed_result)
             parsed_result["output_usps_data"]=av_result_parser_class.get_usps_data(address_validation_result,parsed_result)
-           
+            parsed_result["output_address_metadata"]=av_result_parser_class.get_address_components(address_validation_result,parsed_result)
+
+
         if run_mode == 2:
 
             parsed_result["output_place_ID"]=av_result_parser_class.get_place_ID(address_validation_result,parsed_result)
             parsed_result["output_latlong"]=av_result_parser_class.get_latlong(address_validation_result,parsed_result)
             parsed_result["output_address_metadata"]=av_result_parser_class.get_address_metadata(address_validation_result,parsed_result)
+            parsed_result["output_address_"]=av_result_parser_class.get_address_components(address_validation_result,parsed_result)
 
         if run_mode == 3:
 
@@ -74,7 +74,12 @@ class av_result_parser_class:
         print(parsed_result)
         return parsed_result
 
-    
+    def get_address_components(address_validation_result,parsed_result):
+            #TODO
+        address_components=dict()
+        return address_components
+
+
     def get_address_metadata(address_validation_result,parsed_result):
         try:
             address_metadata=dict()
