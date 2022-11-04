@@ -54,17 +54,21 @@ class av_result_parser_class:
             parsed_result["output_place_ID"]=av_result_parser_class.get_place_ID(address_validation_result,parsed_result)
             parsed_result["output_latlong"]=av_result_parser_class.get_latlong(address_validation_result,parsed_result)
             parsed_result["output_formatted_address"]=av_result_parser_class.get_formatted_address(address_validation_result,parsed_result)
-            parsed_result["output_address_metadata"]=av_result_parser_class.get_address_metadata(address_validation_result,parsed_result)
+            parsed_result["output_postal_address"]=av_result_parser_class.get_postal_address(address_validation_result,parsed_result)
+            parsed_result["output_verdict"]=av_result_parser_class.get_verdict(address_validation_result,parsed_result)
+            #parsed_result["output_address_metadata"]=av_result_parser_class.get_address_metadata(address_validation_result,parsed_result)
             parsed_result["output_usps_data"]=av_result_parser_class.get_usps_data(address_validation_result,parsed_result)
-            parsed_result["output_address_metadata"]=av_result_parser_class.get_address_components(address_validation_result,parsed_result)
+            parsed_result["output_address_components"]=av_result_parser_class.get_address_components(address_validation_result,parsed_result)
 
 
         if run_mode == 2:
+            # Optimum plattened mode
 
             parsed_result["output_place_ID"]=av_result_parser_class.get_place_ID(address_validation_result,parsed_result)
             parsed_result["output_latlong"]=av_result_parser_class.get_latlong(address_validation_result,parsed_result)
-            parsed_result["output_address_metadata"]=av_result_parser_class.get_address_metadata(address_validation_result,parsed_result)
-            parsed_result["output_address_"]=av_result_parser_class.get_address_components(address_validation_result,parsed_result)
+            parsed_result["output_verdict"]=av_result_parser_class.get_verdict(address_validation_result,parsed_result)
+            #parsed_result["output_address_metadata"]=av_result_parser_class.get_address_metadata(address_validation_result,parsed_result)
+            parsed_result["output_address_components"]=av_result_parser_class.get_address_components(address_validation_result,parsed_result)
 
         if run_mode == 3:
 
@@ -75,7 +79,9 @@ class av_result_parser_class:
         return parsed_result
 
     def get_address_components(address_validation_result,parsed_result):
-            #TODO
+            #TODO get Route_Level: COnfirmed from 
+            # https://developers.google.com/maps/documentation/address-validation/reference/rest/v1/TopLevel/validateAddress#AddressComponent
+            # componentType: confirmationLevel && inferred|spellcorrected etc
         address_components=dict()
         return address_components
 
@@ -83,9 +89,9 @@ class av_result_parser_class:
     def get_address_metadata(address_validation_result,parsed_result):
         try:
             address_metadata=dict()
-            address_metadata["output_verdict"]=av_result_parser_class.get_verdict(address_validation_result,parsed_result)
-            address_metadata["output_spell_corrected"]=av_result_parser_class.get_spell_corrected(address_validation_result,parsed_result)
-            address_metadata["output_postal_address"]=av_result_parser_class.get_postal_address(address_validation_result,parsed_result)
+           # address_metadata["output_verdict"]=av_result_parser_class.get_verdict(address_validation_result,parsed_result)
+            #address_metadata["output_spell_corrected"]=av_result_parser_class.get_spell_corrected(address_validation_result,parsed_result)
+            
             return address_metadata
         except:
             print("Error in getting the address metadata")
@@ -181,6 +187,8 @@ class av_result_parser_class:
             raise
 
     def get_spell_corrected(address_validation_result,parsed_result):
+        # TODO merge this code with address components
+
         """_summary_
 
         Args:
