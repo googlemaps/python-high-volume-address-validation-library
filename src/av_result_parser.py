@@ -51,52 +51,68 @@ class av_result_parser_class:
         if run_mode == 1:
            #Most permissive mode. Only for testing
            #      
-            parsed_result["output_place_ID"]=av_result_parser_class.get_place_ID(address_validation_result,parsed_result)
-            parsed_result["output_latlong"]=av_result_parser_class.get_latlong(address_validation_result,parsed_result)
-            parsed_result["output_formatted_address"]=av_result_parser_class.get_formatted_address(address_validation_result,parsed_result)
-            parsed_result["output_postal_address"]=av_result_parser_class.get_postal_address(address_validation_result,parsed_result)
-            parsed_result["output_verdict"]=av_result_parser_class.get_verdict(address_validation_result,parsed_result)
-            #parsed_result["output_address_metadata"]=av_result_parser_class.get_address_metadata(address_validation_result,parsed_result)
-            parsed_result["output_usps_data"]=av_result_parser_class.get_usps_data(address_validation_result,parsed_result)
-            parsed_result["output_address_components"]=av_result_parser_class.get_address_components(address_validation_result,parsed_result)
+            parsed_result["output_place_ID"]=av_result_parser_class.get_place_ID(address_validation_result)
+            parsed_result["output_latlong"]=av_result_parser_class.get_latlong(address_validation_result)
+            parsed_result["output_formatted_address"]=av_result_parser_class.get_formatted_address(address_validation_result)
+            parsed_result["output_postal_address"]=av_result_parser_class.get_postal_address(address_validation_result)
+            parsed_result["output_verdict"]=av_result_parser_class.get_verdict(address_validation_result)            
+            parsed_result["output_usps_data"]=av_result_parser_class.get_usps_data(address_validation_result)
+            parsed_result["output_address_components"]=av_result_parser_class.get_address_components(address_validation_result)
 
 
         if run_mode == 2:
-            # Optimum plattened mode
+            # Optimum flattened mode
 
-            parsed_result["output_place_ID"]=av_result_parser_class.get_place_ID(address_validation_result,parsed_result)
-            parsed_result["output_latlong"]=av_result_parser_class.get_latlong(address_validation_result,parsed_result)
-            parsed_result["output_verdict"]=av_result_parser_class.get_verdict(address_validation_result,parsed_result)
-            #parsed_result["output_address_metadata"]=av_result_parser_class.get_address_metadata(address_validation_result,parsed_result)
-            parsed_result["output_address_components"]=av_result_parser_class.get_address_components(address_validation_result,parsed_result)
+            parsed_result["output_place_ID"]=av_result_parser_class.get_place_ID(address_validation_result)
+            parsed_result["output_latlong"]=av_result_parser_class.get_latlong(address_validation_result)
+            parsed_result["output_verdict"]=av_result_parser_class.get_verdict(address_validation_result)
+            parsed_result["output_address_components"]=av_result_parser_class.get_address_components(address_validation_result)
 
         if run_mode == 3:
 
-           parsed_result["output_place_ID"]=av_result_parser_class.get_place_ID(address_validation_result,parsed_result)
+           parsed_result["output_place_ID"]=av_result_parser_class.get_place_ID(address_validation_result)
 
         print("The dict with all the extracted elemnts is ready")
         print(parsed_result)
         return parsed_result
 
-    def get_address_components(address_validation_result,parsed_result):
-            #TODO get Route_Level: COnfirmed from 
-            # https://developers.google.com/maps/documentation/address-validation/reference/rest/v1/TopLevel/validateAddress#AddressComponent
-            # componentType: confirmationLevel && inferred|spellcorrected etc
-        address_components=dict()
+    def get_address_components(address_validation_result):
+        """_summary_:  https://developers.google.com/maps/documentation/address-validation/reference/rest/v1/TopLevel/validateAddress#AddressComponent
+            componentType: confirmationLevel && inferred|spellcorrected etc
+
+        Args:
+            address_validation_result (_type_): _description_
+        """            
+    
+        address_components_dict=dict()
+        try:     
+            if "addressComponents" in address_validation_result["result"]["address"]:
+                address_components=address_validation_result["result"]["address"]["addressComponents"]
+               
+                for address_component in address_components:
+                    component_type=address_component["componentType"]
+                    
+                    # Store the componentType which contains locality, postal_code, country etc.
+                    # this is done to flatten the output json and make it smaller
+                    address_component_additional_attr=["inferred","spellCorrected","replaced","unexpected"]
+
+                    if  any((match :=item) in address_component_additional_attr for item in address_component):
+                        print("Address components have: "+str(match)+ " as additional attributes")
+            
+                        #Insert address components in the dict object  and concatinate with
+                        # attributes from address_component_additional_attr 
+                        address_components_dict[str(component_type)]=(address_component["confirmationLevel"]+"|"+str(match))
+                    else:            
+                        address_components_dict[str(component_type)]=address_component["confirmationLevel"]
+
+            return address_components_dict
+        except Exception as err:
+            print(f"Unexpected {err=}, {type(err)=}")
+            print("Error in formatted address")
+            raise
         return address_components
 
-
-    def get_address_metadata(address_validation_result,parsed_result):
-        try:
-            address_metadata=dict()
-           # address_metadata["output_verdict"]=av_result_parser_class.get_verdict(address_validation_result,parsed_result)
-            #address_metadata["output_spell_corrected"]=av_result_parser_class.get_spell_corrected(address_validation_result,parsed_result)
-            
-            return address_metadata
-        except:
-            print("Error in getting the address metadata")
-
-    def get_place_ID(address_validation_result,parsed_result):
+    def get_place_ID(address_validation_result):
         """_summary_: Check if response have geocode and placeID and store it in the parsed_result
                     object
 
@@ -116,7 +132,7 @@ class av_result_parser_class:
             print("Error in getting place ID")
             raise
 
-    def get_formatted_address(address_validation_result,parsed_result):
+    def get_formatted_address(address_validation_result):
         """_summary_
 
         Args:
@@ -137,7 +153,7 @@ class av_result_parser_class:
             print("Error in formatted address")
             raise
 
-    def get_verdict(address_validation_result,parsed_result):
+    def get_verdict(address_validation_result):
         """_summary_
 
         Args:
@@ -163,8 +179,9 @@ class av_result_parser_class:
             raise
 
 
-    def get_latlong(address_validation_result,parsed_result):
-        """_summary_
+    def get_latlong(address_validation_result):
+        """_summary_: Location element contains latlong, plu code, boundaries etc.
+        we just want to retireve the lat long and not all elements inside the location element.
 
         Args:
             address_validation_result (_type_): _description_
@@ -175,9 +192,12 @@ class av_result_parser_class:
         """       
         try: 
             latlong_dict={}
+            
             if "location" in address_validation_result["result"]["geocode"]:
                 if "latitude" in address_validation_result["result"]["geocode"]["location"]:
                     latlong_dict["latitude"] = address_validation_result["result"]["geocode"]["location"]["latitude"]
+                
+                #Get the longitude from geocode
                 if "longitude" in address_validation_result["result"]["geocode"]["location"]:
                     latlong_dict["longitude"] = address_validation_result["result"]["geocode"]["location"]["longitude"]
             return latlong_dict
@@ -186,30 +206,7 @@ class av_result_parser_class:
             print("No latitude or longitude found")
             raise
 
-    def get_spell_corrected(address_validation_result,parsed_result):
-        # TODO merge this code with address components
-
-        """_summary_
-
-        Args:
-            address_validation_result (_type_): _description_
-            parsed_result (_type_): _description_
-
-        Returns:
-            _type_: _description_
-        """   
-        try:     
-            if "addressComponents" in address_validation_result["result"]["address"]:
-                        for address_component in address_validation_result["result"]["address"]["addressComponents"]:
-                            for spell_corrected in address_component:
-                                if spell_corrected == "spellCorrected":
-                                    return address_component[spell_corrected]
-        except Exception as err:
-            print(f"Unexpected {err=}, {type(err)=}")
-            print("Error in formatted address")
-            raise
-
-    def get_postal_address(address_validation_result,parsed_result):
+    def get_postal_address(address_validation_result):
         """_summary_
 
         Args:
@@ -220,21 +217,25 @@ class av_result_parser_class:
             _type_: _description_
         """        
         try:
+            postal_address=dict()
             if "postalAddress" in address_validation_result["result"]["address"]:
                 for k in address_validation_result["result"]["address"]["postalAddress"]:
                     if k == "addressLines":
                         addressLineCounter = 1
+                        #TODO: why not store other elements other than addressLines
                         for al in address_validation_result["result"]["address"]["postalAddress"][k]:
-                            parsed_result["addressLine" + str(addressLineCounter)] = al
+                            postal_address["addressLine" + str(addressLineCounter)] = al
                             addressLineCounter += 1
                             continue
-                        return address_validation_result["result"]["address"]["postalAddress"][k]
+                        return postal_address
+                        #FIXME: Remove this return after validating
+                        #return address_validation_result["result"]["address"]["postalAddress"][k]
         except Exception as err:
             print(f"Unexpected {err=}, {type(err)=}")
             print("Error in formatted address")
             raise
 
-    def get_usps_data(address_validation_result,parsed_result):
+    def get_usps_data(address_validation_result):
         
         """_summary_ : [USA Only] Store additional addresss metadata from 
                 USPS dataset
@@ -250,17 +251,16 @@ class av_result_parser_class:
             # Initiate empty dict to store the usps data
             usps_data=dict()
             if "metadata" in address_validation_result["result"]:
-                print("Metadata :::: INSIDE for loop")
+                print("Retrieving metadata from the USPS dataset")
                 for k in address_validation_result["result"]["metadata"].keys():
-                    print("INSIDE for loop")
-                    parsed_result[k] = address_validation_result["result"]["metadata"][k]
+                #FIXME: remove the parsed_result 
+                    usps_data[k] = address_validation_result["result"]["metadata"][k]
                
                 # Check to see if uspsData component exists. This will only exist if the address
                 # is based in USA
                     if "uspsData" in address_validation_result["result"]:
                         for k in address_validation_result["result"]["uspsData"].keys():
-                            print("Metadata :::: INSIDE uspsData loop :::: "+ k)
-
+                            
                     # [USA Only] Store the postal service standardized address
                             if k == "standardizedAddress":
                                 #for sa in address_validation_result["result"]["uspsData"]["standardizedAddress"].keys():
