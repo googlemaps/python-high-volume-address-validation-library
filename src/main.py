@@ -48,6 +48,7 @@ av_result_parser_load=av_result_parser_class()
 class HighVolumeAVMain: 
 
     def read_and_store_addresses():
+                
     # Read the csv file, parse it, construct the addresses
     # Insert the addresses in the persistant shelve object
         try:
@@ -57,7 +58,7 @@ class HighVolumeAVMain:
         except IndexError as ie:
             print(ie)
             print('Bad row reading csv')
-    K
+
 
     #
     # This functions checks if the load in the shelve object is accurate or not
