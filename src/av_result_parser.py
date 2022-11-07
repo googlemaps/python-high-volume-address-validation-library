@@ -68,9 +68,9 @@ class av_result_parser_class:
             parsed_result["output_formatted_address"]=av_result_parser_class.get_formatted_address(address_validation_result)
             parsed_result["output_postal_address"]=av_result_parser_class.get_postal_address(address_validation_result)
             parsed_result["output_verdict"]=av_result_parser_class.get_verdict(address_validation_result)            
+            parsed_result["output_address_type"]=av_result_parser_class.get_address_type(address_validation_result)            
             parsed_result["output_usps_data"]=av_result_parser_class.get_usps_data(address_validation_result)
             parsed_result["output_address_components"]=av_result_parser_class.get_address_components(address_validation_result)
-
 
         if run_mode == 2:
             # Optimum flattened mode
@@ -155,10 +155,10 @@ class av_result_parser_class:
             _type_: A dict containing the formatted address
         """        
         try: 
-            if "address" in address_validation_result[RESULT]:
+            if ADDRESS in address_validation_result[RESULT]:
                    
                 #Add the formatted address to the parsed result dict
-                if "formattedAddress" in address_validation_result[RESULT][ADDRESS]:
+                if FORMATTED_ADDRESS in address_validation_result[RESULT][ADDRESS]:
                     return address_validation_result[RESULT][ADDRESS][FORMATTED_ADDRESS]
         except Exception as err:
             print(f"Unexpected {err=}, {type(err)=}")
@@ -206,12 +206,12 @@ class av_result_parser_class:
         try: 
             latlong_dict={}
             
-            if "location" in address_validation_result[RESULT][GEOCODE]:
-                if "latitude" in address_validation_result[RESULT][GEOCODE][LOCATION]:
+            if LOCATION in address_validation_result[RESULT][GEOCODE]:
+                if LATITUDE in address_validation_result[RESULT][GEOCODE][LOCATION]:
                     latlong_dict[LATITUDE] = address_validation_result[RESULT][GEOCODE][LOCATION][LATITUDE]
                 
                 #Get the longitude from geocode
-                if "longitude" in address_validation_result[RESULT][GEOCODE][LOCATION]:
+                if LONGITUDE in address_validation_result[RESULT][GEOCODE][LOCATION]:
                     latlong_dict[LONGITUDE] = address_validation_result[RESULT][GEOCODE][LOCATION][LONGITUDE]
             return latlong_dict
         except Exception as err:
@@ -235,7 +235,8 @@ class av_result_parser_class:
                 for k in address_validation_result[RESULT][ADDRESS][POSTAL_ADDRESS]:
                     if k == ADDRESS_LINES:
                         addressLineCounter = 1
-                        #TODO: why not store other elements other than addressLines
+                        # We can only store addressLines from postal_addresses thus this code checks
+                        # address lines and returns them
                         for al in address_validation_result[RESULT][ADDRESS][POSTAL_ADDRESS][k]:
                             postal_address[ADDRESS_LINES + str(addressLineCounter)] = al
                             addressLineCounter += 1
@@ -247,6 +248,26 @@ class av_result_parser_class:
             print(f"Unexpected {err=}, {type(err)=}")
             print("Error in formatted address")
             raise
+
+    def get_address_type(address_validation_result):
+        """_summary_: Retruns address validation Metadata as described here:
+        https://developers.google.com/maps/documentation/address-validation/reference/rest/v1/TopLevel/validateAddress#addressmetadata
+
+        Args:
+            address_validation_result (_type_): _description_
+
+        Returns:
+            dict: containing address metadata 
+        """        
+
+        address_metadata_data=dict()
+        if METADATA in address_validation_result[RESULT]:
+            
+            print("Retrieving metadata from the USPS dataset")
+            for key in address_validation_result[RESULT][METADATA].keys():
+                address_metadata_data[key] = address_validation_result[RESULT][METADATA][key]
+            
+        return address_metadata_data
 
     def get_usps_data(address_validation_result):
         
@@ -263,27 +284,21 @@ class av_result_parser_class:
         try:
             # Initiate empty dict to store the usps data
             usps_data=dict()
-            if METADATA in address_validation_result[RESULT]:
-                print("Retrieving metadata from the USPS dataset")
-                for k in address_validation_result[RESULT][METADATA].keys():
-                #FIXME: remove the parsed_result 
-                    usps_data[k] = address_validation_result[RESULT][METADATA][k]
-               
-                # Check to see if uspsData component exists. This will only exist if the address
-                # is based in USA
-                    if USPS_DATA in address_validation_result[RESULT]:
-                        for k in address_validation_result[RESULT][USPS_DATA].keys():
+    
+            # Check to see if uspsData component exists. This will only exist if the address
+            # is based in USA
+            if USPS_DATA in address_validation_result[RESULT]:
+                for key in address_validation_result[RESULT][USPS_DATA].keys():
                             
-                    # [USA Only] Store the postal service standardized address
-                            if k == STANDARDIZED_ADDRESS:
-                                #for sa in address_validation_result["result"]["uspsData"]["standardizedAddress"].keys():
-                                    usps_data = address_validation_result[RESULT][USPS_DATA][STANDARDIZED_ADDRESS]
-                            continue
-                        # [USA Only] Store the USPS data
-                        print("uspsData extracted from result is::::")
-                        #print(address_validation_result["result"]["uspsData"][k])
-                        print(usps_data)
-                        return usps_data      
+                # [USA Only] Store the postal service standardized address
+                    if key == STANDARDIZED_ADDRESS:
+                        #for sa in address_validation_result["result"]["uspsData"]["standardizedAddress"].keys():
+                        usps_data = address_validation_result[RESULT][USPS_DATA][STANDARDIZED_ADDRESS]
+                        continue
+                    # [USA Only] Store the USPS data
+                    print("uspsData extracted from result is::::")      
+                    print(usps_data)
+                    return usps_data      
         
         except Exception as err:
             print(f"Unexpected {err=}, {type(err)=}")
