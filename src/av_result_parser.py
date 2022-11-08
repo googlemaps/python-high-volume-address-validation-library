@@ -189,6 +189,6 @@ class av_result_parser_class:
                         # [USA Only] Store the USPS data
                         parsed_result[k] = address_validation_result["result"]["uspsData"][k]
 
-        print("The dict with all the extracted elemnts is ready")
+        print(" The dict with all the extracted elements is ready")
         print(parsed_result)
         return parsed_result

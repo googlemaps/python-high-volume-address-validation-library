@@ -137,6 +137,7 @@ addresses
 .addresses
 output.json
 api-key.js
+duplicationReport.csv
 
 #other
 /.vscode
