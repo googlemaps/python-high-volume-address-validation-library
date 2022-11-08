@@ -132,6 +132,9 @@ dmypy.json
 #ignore the shelve file to commit
 *.db
 
+#ignore all csv files to commit
+*.csv
+
 # ignore run files
 addresses
 .addresses

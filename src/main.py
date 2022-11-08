@@ -52,17 +52,35 @@ av_result_parser_load = av_result_parser_class()
 class HighVolumeAVMain: 
 
     def read_and_store_addresses():
+<<<<<<< HEAD
         """_summary_: Read the csv file, parse it, construct the addresses. Insert the addresses in the persistant shelve object
 
         Returns:
             _type_: _description_
         """  
+=======
+                
+    # Read the csv file, parse it, construct the addresses
+    # Insert the addresses in the persistant shelve object
+>>>>>>> 3a81df0a7a945d2185a2f8d3c0c3a78856cf0fd6
         try:
             with read_write_addressess_class() as read_write_addressess_load:
                 read_write_addressess_load.read_csv_with_addresses()
                 return True
         except IndexError as ie:
             print(ie)
+<<<<<<< HEAD
+=======
+            print('Bad row reading csv')
+
+
+    #
+    # This functions checks if the load in the shelve object is accurate or not
+    # This functions checks if the load in the shelve object is accurate or not
+    # read_write_addressess_load.test_datastore()
+    #
+
+>>>>>>> 3a81df0a7a945d2185a2f8d3c0c3a78856cf0fd6
 
     def parse_av_response():
         """_summary_:
