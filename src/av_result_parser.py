@@ -55,14 +55,23 @@ class av_result_parser_class:
             _type_: _description_
         """
 
-        run_mode = config.run_mode
+        run_mode=config.run_mode
         
-        #Dict to store the parsed result
         parsed_result = dict()
+        """_summary_:
+        Dict to store the parsed result
 
+        Returns:
+            _type_: _description_
+        """
+            
         if run_mode == 1:
-           #Most permissive mode. DO NOT USE this mode other than for testing
-           #      
+            """_summary_:
+            Most permissive mode. DO NOT USE this mode other than for testing
+
+            Returns:
+                _type_: _description_
+            """    
             parsed_result["output_place_ID"]=av_result_parser_class.get_place_ID(address_validation_result)
             parsed_result["output_latlong"]=av_result_parser_class.get_latlong(address_validation_result)
             parsed_result["output_formatted_address"]=av_result_parser_class.get_formatted_address(address_validation_result)
@@ -73,8 +82,12 @@ class av_result_parser_class:
             parsed_result["output_address_components"]=av_result_parser_class.get_address_components(address_validation_result)
 
         if run_mode == 2:
-            # Optimum flattened mode
+            """_summary_:
+            Optimum flattened mode
 
+            Returns:
+                _type_: _description_
+            """   
             parsed_result["output_place_ID"]=av_result_parser_class.get_place_ID(address_validation_result)
             parsed_result["output_latlong"]=av_result_parser_class.get_latlong(address_validation_result)
             parsed_result["output_verdict"]=av_result_parser_class.get_verdict(address_validation_result)
@@ -104,16 +117,20 @@ class av_result_parser_class:
                
                 for address_component in address_components:
                     component_type=address_component[COMPONENT_TYPE]
-                    
-                    # Store the componentType which contains locality, postal_code, country etc.
-                    # this is done to flatten the output json and make it smaller
+                    """_summary_:
+                    Store the componentType which contains locality, postal_code, country etc.
+                    This is done to flatten the output json and make it smaller
+                    """                    
+                   
                     address_component_additional_attr=["inferred","spellCorrected","replaced","unexpected"]
 
                     if  any((match :=item) in address_component_additional_attr for item in address_component):
-                        print("Address components have: "+str(match)+ " as additional attributes")
-            
-                        #Insert address components in the dict object  and concatinate with
-                        # attributes from address_component_additional_attr 
+
+                        """_summary_:
+                        Insert address components in the dict object  and concatinate with
+                        attributes from address_component_additional_attr
+                        """                         
+                        
                         address_components_dict[str(component_type)]=(address_component[CONFIRMATION_LEVEL]+"|"+str(match))
                     else:            
                         address_components_dict[str(component_type)]=address_component[CONFIRMATION_LEVEL]
@@ -283,21 +300,23 @@ class av_result_parser_class:
             _type_: _description_
         """  
         try:
-            # Initiate empty dict to store the usps data
             usps_data=dict()
-    
-            # Check to see if uspsData component exists. This will only exist if the address
-            # is based in USA
+            """_summary_ : Initiate empty dict to store the usps data
+            """
             if USPS_DATA in address_validation_result[RESULT]:
-                for key in address_validation_result[RESULT][USPS_DATA].keys():
-                            
-                # [USA Only] Store the postal service standardized address
+                """_summary_ : Check to see if uspsData component exists. This will only exist if the address is based in USA
+                """ 
+            for key in address_validation_result[RESULT][USPS_DATA].keys():
+                    """_summary_ : [USA Only] Store the postal service standardized address
+                    """ 
                     if key == STANDARDIZED_ADDRESS:
-                        #for sa in address_validation_result["result"]["uspsData"]["standardizedAddress"].keys():
+                        """_summary_ : for sa in address_validation_result["result"]["uspsData"]["standardizedAddress"].keys():
+                        """ 
                         usps_data = address_validation_result[RESULT][USPS_DATA][STANDARDIZED_ADDRESS]
                         continue
-                    # [USA Only] Store the USPS data
-                    print("uspsData extracted from result is::::")      
+                        """_summary_ : [USA Only] Store the USPS data
+                        """                         
+                    print("uspsData extracted from result is:")      
                     print(usps_data)
                     return usps_data      
         

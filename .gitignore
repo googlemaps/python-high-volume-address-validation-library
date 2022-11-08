@@ -142,6 +142,7 @@ output.json
 output.csv
 api-key.js
 duplicationReport.csv
+only_addresses.csv
 
 #other
 /.vscode
