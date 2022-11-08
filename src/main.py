@@ -63,7 +63,6 @@ class HighVolumeAVMain:
                 return True
         except IndexError as ie:
             print(ie)
-            print('Bad row reading csv')
 
     def parse_av_response():
         """_summary_:
