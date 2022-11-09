@@ -16,7 +16,7 @@
 import yaml
 import argparse
 
-_DEFAULT_CONFIG_FILE='test_config.yaml'
+_DEFAULT_CONFIG_FILE='config.yaml'
 
 class Config:
     

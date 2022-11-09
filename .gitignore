@@ -148,3 +148,4 @@ only_addresses.csv
 /.vscode
 .DS_Store
 *.code-workspace
+test_config.yaml

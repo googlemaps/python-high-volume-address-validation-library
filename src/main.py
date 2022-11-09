@@ -146,13 +146,13 @@ class HighVolumeAVMain:
             outputJson=json.dumps(dict(address_shelve), indent=4 )
             return outputJson
 
-        # Store duplicate addresses, output_csv will process addresses once     
-        def print_duplication():
-        
-            with open('duplicationReport.csv', 'w') as duplication_report:
-                
-                for key in read_write_addresses.global_duplicate_counter.keys():
-                    duplication_report.write("%s,%s\n"%(key,read_write_addresses.global_duplicate_counter[key]))
+    # Store duplicate addresses, output_csv will process addresses once     
+    def print_duplication():
+    
+        with open('duplicationReport.csv', 'w') as duplication_report:
+            
+            for key in read_write_addresses.global_duplicate_counter.keys():
+                duplication_report.write("%s,%s\n"%(key,read_write_addresses.global_duplicate_counter[key]))
 
     """_summary_:
     Delete the shelve file after it is done
