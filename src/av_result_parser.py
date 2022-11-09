@@ -38,6 +38,7 @@ COMPONENT_TYPE="componentType"
 ADDRESS_LINES="addressLines"
 
 class av_result_parser_class:
+    
 
     def parse_av_response(self, address_validation_result):
         """_summary_:                 
