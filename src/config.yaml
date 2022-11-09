@@ -40,8 +40,8 @@ directory : "./"
 run_mode : 2
 
 #  Test Mode: 1
-#  Production mode -NoUsers: 2
-#  Production mode -Users: 3
+#  Production mode -Users: 2
+#  Production mode -NoUsers: 3
 
 ## Can output either csv or json
 # Values to be set are either csv or json

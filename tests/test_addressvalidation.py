@@ -18,12 +18,13 @@
 
 """Tests for the addressvalidation module."""
 
-#import responses
+
 
 import googlemaps
 import unittest
-#from . import TestCase
 
+
+#FIXME: This unit test needs to be updated
 
 class AddressValidationTest(TestCase):
     def setUp(self):

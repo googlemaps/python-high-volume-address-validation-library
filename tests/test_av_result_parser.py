@@ -12,11 +12,13 @@ from os import path
 sys.path.append(os.path.join(os.path.dirname(sys.path[0]),'src'))
 from av_result_parser import av_result_parser_class
 
+NYC_GOOGLE_OFFICE_RESPONSE='google_ny_response_test_data.json'
+
 # Opening JSON file
 class Testing(unittest.TestCase):
 
     def parse_response():
-        with open(os.path.join(sys.path[0],'google_ny_response_test_data.json')) as json_file:
+        with open(os.path.join(sys.path[0],NYC_GOOGLE_OFFICE_RESPONSE)) as json_file:
             av_response_data = json.load(json_file)
  
         # Print the type of data variable

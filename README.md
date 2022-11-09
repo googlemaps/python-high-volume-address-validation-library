@@ -7,7 +7,7 @@ This program is a wrapper around [Address Validation API](https://developers.goo
 
 ![High-Level-overview](/doc_images/High-Volume-Address-Validation-overview.png)
 
-The program takes a `csv` file. It then uses the API key configured in config.yaml to start the processing of the addresses.
+The program takes a `csv` file. It then uses the API key configured in `config.yaml` to start the processing of the addresses.
 
 ## Overview
 
@@ -91,6 +91,7 @@ separator : ","
 - Maintains QPM limits set by the Address Validation API
 - Async code and maintains state
 - Checks for duplicates and runs repeated addresses only once
+- Generates a duplication report which shows which addresses are duplicated and how often
 - Modes help create parity with Terms of Service
 
 ## Install and run

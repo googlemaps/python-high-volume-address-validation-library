@@ -18,15 +18,12 @@
 
 """Tests for the addressvalidation module."""
 
-#import responses
-
 import googlemaps
-#from . import TestCase
 import unittest
 import sys
-# sys.path.append('../tests')
 
 from test_config_loader import config
+#FIXME: This unit test needs to be updated
 
 class ConfigLoaderTest(unittest.TestCase):
     def setUp(self):
