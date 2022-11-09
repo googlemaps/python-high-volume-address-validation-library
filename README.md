@@ -86,7 +86,6 @@ separator : ","
 ***Shelve db file:*** This is a temporary file created to maintain persistance for a long runninng process.
 ```shelve_db : addresses```
 
-
 ### Key features
 
 - Maintains QPM limits set by the Address Validation API
@@ -106,18 +105,7 @@ separator : ","
   pip3 install googlemaps
   `
 
-- Update `config.yaml` file in `/src` folder with your API key, `csv` output path, and mode in which to run the library (see "Running Modes" section):
-
-  ```
-  ## Address Validation API key
-  api_key : 'YOUR_API_KEY'
-
-  ## Name of the output csv file
-  output_csv : './test-results.csv'
-  
-  ## There are three modes for running the software.
-  run_mode : 1
-  ```
+- Update `config.yaml` file in with your API key, `csv` output path, and mode in which to run the library (see "Running Modes" section):
 
 - Run:  
   `
@@ -140,7 +128,7 @@ separator : ","
 
   The software works in three modes. You can set the mode to comply with [Google Maps Platform Terms of Service](https://cloud.google.com/maps-platform/terms), by configuring the `config.yaml` file corresponding to the use case under which this is run.
 
-  ### Overall Flow of logic
+### Overall Flow of logic
 
 - Reads a `csv` file
 - Constructs the address as per configuration
@@ -157,6 +145,7 @@ separator : ","
   It will also output a duplication csv file which reports all the addresses which were duplicates in the input request.
 
 ## License
+
 Copyright 2022 Google LLC.
 
 Licensed to the Apache Software Foundation (ASF) under one or more contributor
@@ -166,7 +155,7 @@ file to you under the Apache License, Version 2.0 (the "License"); you may not
 use this file except in compliance with the License.  You may obtain a copy of
 the License at
 
-  http://www.apache.org/licenses/LICENSE-2.0
+  <http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
