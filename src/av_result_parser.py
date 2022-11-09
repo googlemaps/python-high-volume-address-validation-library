@@ -50,7 +50,7 @@ class av_result_parser_class:
              If running in Production mode -No Users, allow the application to store Place ID
 
         Args:
-            address_validation_result (_type_): _description_
+            address_validation_result (dict): Input of the address validation response in json format
 
         Returns:
             _type_: _description_
@@ -216,9 +216,8 @@ class av_result_parser_class:
         we just want to retireve the lat long and not all elements inside the location element.
 
         Args:
-            address_validation_result (_type_): _description_
-            parsed_result (_type_): _description_
-
+            address_validation_result (dict): Input of the address validation response in json format
+           
         Returns:
             _type_: _description_
         """       
@@ -277,7 +276,7 @@ class av_result_parser_class:
         https://developers.google.com/maps/documentation/address-validation/reference/rest/v1/TopLevel/validateAddress#addressmetadata
 
         Args:
-            address_validation_result (_type_): _description_
+            address_validation_result (dict): Input of the address validation response in json format
 
         Returns:
             dict: containing address metadata 
@@ -305,22 +304,20 @@ class av_result_parser_class:
             _type_: _description_
         """  
         try:
+            # Initiate empty dict to store the usps data
             usps_data=dict()
-            """_summary_ : Initiate empty dict to store the usps data
-            """
+            
             if USPS_DATA in address_validation_result[RESULT]:
-                """_summary_ : Check to see if uspsData component exists. This will only exist if the address is based in USA
-                """ 
-            for key in address_validation_result[RESULT][USPS_DATA].keys():
-                    """_summary_ : [USA Only] Store the postal service standardized address
-                    """ 
+                # Check to see if uspsData component exists. This will only exist if the address is based in USA
+                 
+                for key in address_validation_result[RESULT][USPS_DATA].keys():
+                    # [USA Only] Store the postal service standardized address
+                     
                     if key == STANDARDIZED_ADDRESS:
-                        """_summary_ : for sa in address_validation_result["result"]["uspsData"]["standardizedAddress"].keys():
-                        """ 
+                         
                         usps_data = address_validation_result[RESULT][USPS_DATA][STANDARDIZED_ADDRESS]
                         continue
-                        """_summary_ : [USA Only] Store the USPS data
-                        """                         
+                                               
                     print("uspsData extracted from result is:")      
                     print(usps_data)
                     return usps_data      

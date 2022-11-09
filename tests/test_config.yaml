@@ -16,7 +16,7 @@
 address_file : './only_addresses.csv'
 
 #Provide the columns which needs to be concatinated to get the address
-#column_numbers : [3,4,5,6,7]
+#example column_numbers : [3,4,5,6,7]
 column_numbers : [0,1,2,3,4]
 
 #Shelse db file
