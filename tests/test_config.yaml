@@ -1,0 +1,45 @@
+# Copyright 2022 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#Location of the address file
+address_file : './only_addresses.csv'
+
+#Provide the columns which needs to be concatinated to get the address
+#example column_numbers : [3,4,5,6,7]
+column_numbers : [0,1,2,3,4]
+
+#Shelse db file
+shelve_db : 'addresses'
+
+#Set the separator in the file with which to create the final address
+separator : ','
+
+#API_KEY
+api_key : 'YOUR_API_KEY'
+
+#Name of the output csv file
+output_csv : './test-results.csv'
+
+
+#Directory where to look for the db files
+directory : './'
+
+#
+# There are three modes for running the software. More details in the
+# Readme file. Itś 1 by default
+#  Test Mode: 1
+#  Production mode -Users : 2
+#  Production mode -NoUsers : 3
+#
+run_mode : 2

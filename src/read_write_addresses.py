@@ -13,8 +13,6 @@
 # limitations under the License.
 
 #read_write_addresses.py
-
-
 import csv
 import shelve
 

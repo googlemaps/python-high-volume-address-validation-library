@@ -1,0 +1,144 @@
+{
+  "result": {
+    "verdict": {
+      "inputGranularity": "PREMISE",
+      "validationGranularity": "PREMISE",
+      "geocodeGranularity": "PREMISE",
+      "hasInferredComponents": true
+    },
+    "address": {
+      "formattedAddress": "111 8th Avenue, New York, NY 10011-5201, USA",
+      "postalAddress": {
+        "regionCode": "US",
+        "languageCode": "en",
+        "postalCode": "10011-5201",
+        "administrativeArea": "NY",
+        "locality": "New York",
+        "addressLines": [
+          "111 8th Ave"
+        ]
+      },
+      "addressComponents": [
+        {
+          "componentName": {
+            "text": "111",
+            "languageCode": "en"
+          },
+          "componentType": "street_number",
+          "confirmationLevel": "CONFIRMED"
+        },
+        {
+          "componentName": {
+            "text": "8th Avenue",
+            "languageCode": "en"
+          },
+          "componentType": "route",
+          "confirmationLevel": "CONFIRMED"
+        },
+        {
+          "componentName": {
+            "text": "USA",
+            "languageCode": "en"
+          },
+          "componentType": "country",
+          "confirmationLevel": "CONFIRMED"
+        },
+        {
+          "componentName": {
+            "text": "10011"
+          },
+          "componentType": "postal_code",
+          "confirmationLevel": "CONFIRMED",
+          "inferred": true
+        },
+        {
+          "componentName": {
+            "text": "New York",
+            "languageCode": "en"
+          },
+          "componentType": "locality",
+          "confirmationLevel": "CONFIRMED",
+          "inferred": true
+        },
+        {
+          "componentName": {
+            "text": "NY",
+            "languageCode": "en"
+          },
+          "componentType": "administrative_area_level_1",
+          "confirmationLevel": "CONFIRMED",
+          "inferred": true
+        },
+        {
+          "componentName": {
+            "text": "5201"
+          },
+          "componentType": "postal_code_suffix",
+          "confirmationLevel": "CONFIRMED",
+          "inferred": true
+        }
+      ],
+      "missingComponentTypes": [
+        "subpremise"
+      ]
+    },
+    "geocode": {
+      "location": {
+        "latitude": 40.7408433,
+        "longitude": -74.0020062
+      },
+      "plusCode": {
+        "globalCode": "87G7PXRX+85"
+      },
+      "bounds": {
+        "low": {
+          "latitude": 40.7408433,
+          "longitude": -74.0020062
+        },
+        "high": {
+          "latitude": 40.7408433,
+          "longitude": -74.0020062
+        }
+      },
+      "placeId": "ChIJz1X15L5ZwokR3HHMKxQ7Gtk",
+      "placeTypes": [
+        "street_address"
+      ]
+    },
+    "metadata": {
+      "highrise": true,
+      "business": true,
+      "poBox": false,
+      "multiFamily": false,
+      "residential": false
+    },
+    "uspsData": {
+      "standardizedAddress": {
+        "firstAddressLine": "111 8TH AVE",
+        "cityStateZipAddressLine": "NEW YORK NY 10011-5201",
+        "city": "NEW YORK",
+        "state": "NY",
+        "zipCode": "10011",
+        "zipCodeExtension": "5201"
+      },
+      "deliveryPointCode": "99",
+      "deliveryPointCheckDigit": "1",
+      "dpvConfirmation": "D",
+      "dpvFootnote": "AAN1",
+      "dpvCmra": "N",
+      "dpvVacant": "N",
+      "dpvNoStat": "Y",
+      "carrierRoute": "C017",
+      "carrierRouteIndicator": "D",
+      "postOfficeCity": "NEW YORK",
+      "postOfficeState": "NY",
+      "fipsCountyCode": "061",
+      "county": "NEW YORK",
+      "elotNumber": "0019",
+      "elotFlag": "D",
+      "addressRecordType": "H",
+      "defaultAddress": true
+    }
+  },
+  "responseId": "ceba8bed-e83b-46c2-8ee0-fff1896ae684"
+}
