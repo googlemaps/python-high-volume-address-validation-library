@@ -14,8 +14,6 @@
 
 #config_loader.py
 from fileinput import filename
-import os
-import sys
 import yaml
 import argparse
 
@@ -23,21 +21,21 @@ import argparse
 #Default location of config file
 #default_file_path='config.yaml'
 #test_config_file='./tests/test_config.yaml'
-_DEFAULT_CONFIG_FILE='config.yaml'
+_DEFAULT_CONFIG_FILE='test_config.yaml'
 
 class Config:
     
     def __init__(self,config_file=None):
 
         args=self.read_command_line()
-        #print("command line args is", args.filename)
+       
         if args.filename is not None:
             self.load_yaml(args.filename)
         elif config_file is not None:
             self.load_yaml(config_file)
             #self.load_yaml(test_config_file)    
         else:
-            self.load_yaml(os.path.join(sys.path[0],_DEFAULT_CONFIG_FILE))
+            self.load_yaml(_DEFAULT_CONFIG_FILE)
 
    #load config yaml     
     def load_yaml(self,file_path):
@@ -45,7 +43,8 @@ class Config:
             self.config = yaml.safe_load(f)
 
 
-    #Read command line argument         
+    #Read command line argument
+    #TODO: Command line argument is not used anywhere.          
 
     def read_command_line(self):
         # Create the parser
