@@ -12,15 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#config_loader.py
-from fileinput import filename
+
 import yaml
 import argparse
 
-
-#Default location of config file
-#default_file_path='config.yaml'
-#test_config_file='./tests/test_config.yaml'
 _DEFAULT_CONFIG_FILE='test_config.yaml'
 
 class Config:
@@ -31,9 +26,11 @@ class Config:
        
         if args.filename is not None:
             self.load_yaml(args.filename)
+
+        #TODO: programatically pass on different config files
+        #based on different test profiles
         elif config_file is not None:
-            self.load_yaml(config_file)
-            #self.load_yaml(test_config_file)    
+            self.load_yaml(config_file)  
         else:
             self.load_yaml(_DEFAULT_CONFIG_FILE)
 
@@ -56,6 +53,7 @@ class Config:
 
         return args
 
+    #FIXME: Is this code needed?
     def __getattr__(self, name):
         try:
             return self.config[name]

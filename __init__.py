@@ -13,10 +13,3 @@
 # limitations under the License.
 
 __version__ = "0.1"
-
-#from src import main
-#from src import av_client
-#from src import av_result_parser
-#from src import rest_api
-#from src import read_write_addresses
-#from tests import test_av_result_parser

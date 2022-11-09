@@ -249,11 +249,15 @@ class av_result_parser_class:
             _type_: _description_
         """        
         try:
+            # Initialize a dict to capture the response
             postal_address=dict()
             if POSTAL_ADDRESS in address_validation_result[RESULT][ADDRESS]:
-                for k in address_validation_result[RESULT][ADDRESS][POSTAL_ADDRESS]:
-                    if k == ADDRESS_LINES:
+                for postal_address in address_validation_result[RESULT][ADDRESS][POSTAL_ADDRESS]:
+                    
+                    #We only want to store address lines and no other component of postal address
+                    if postal_address == ADDRESS_LINES:
                         addressLineCounter = 1
+
                         # We can only store addressLines from postal_addresses thus this code checks
                         # address lines and returns them
                         for al in address_validation_result[RESULT][ADDRESS][POSTAL_ADDRESS][k]:
