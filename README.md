@@ -22,37 +22,29 @@ You will need an API Key to call the Address Validation API.
 
  Details of the elements we discuss in this section can be found in the [validateAddress object reference guide](https://developers.google.com/maps/documentation/address-validation/reference/rest/v1/TopLevel/validateAddress)
 
-1. ### Test Mode : 1  
+1. ### Test Mode : 1 
 
-      In test mode you can store more details from the Address Validation API response .
-
-      - place_ID
-      - latlong
-      - formatted_address
-      - postal_address
+      Caching period: 30 consecutive calendar days, after which Customer must (1) delete the cached Google Maps Content or (2) replace with End User data provided through End User confirmation or correction. Refer to [Google Maps Platform Terms of Service Table 11.3.1 (Caching Permissions)](https://cloud.google.com/maps-platform/terms/maps-service-terms).
+      - placeId
+      - Location: latitude values, longitude values
       - verdict
-      - address_type
-      - usps_data
-      - address_components
-  
-> **Note:** This is an extrmely permissive mode and should be avoided to be used for most scenarios. Only use case where this mode can be used is for testing and for very limited number of addresses. The responses have to be deleted within 15 days.
+      - formattedAddress
+      - postalAddress
+      - addressComponent: componentName
+      - USPS Data standardizedAddress
+      - addressComponent: confirmationLevel, inferred, spellCorrected, replaced, unexpected
 
 2. ### Production mode -Users : 2 (default)
 
-      A Production mode <ins>not</ins> initiated after user/human interaction, only minimal data elements are allowed to be stored as per [Google Maps Platform Terms of Service](https://cloud.google.com/maps-platform/terms). Typically involves successive and multiple programmatic requests to Address Validation API.
-
-      - place_ID
-      - latlong
-      - verdict
-      - address_components
-
-> **Note:** All the data elements in this mode can only be cached for a maximum of 30 days and >   must be deleted afterwords.Only place_ID can be stored indefinitely.
+      Caching period: 30 consecutive calendar days, after which Customer must (1) delete the cached Google Maps Content or (2) replace with End User data provided through End User confirmation or correction. Refer to [Google Maps Platform Terms of Service Table 11.3.1 (Caching Permissions)](https://cloud.google.com/maps-platform/terms/maps-service-terms). 
+      - placeId
+      - Location: latitude values, longitude values
+      - addressComponent: confirmationLevel, inferred, spellCorrected, replaced, unexpected
 
 3. ### Production mode -NoUsers : 3
-
-      a Production mode initiated after user/human interaction, some more data may be cached for the unique purpose of the user completing his singular task.
-
-    - place_ID
+      Caching period: indefinitely. Refer to [Google Maps Platform Terms of Service Table 11.3.1 (Caching Permissions)](https://cloud.google.com/maps-platform/terms/maps-service-terms).
+      
+      - placeId
 
 - Update the mode in `config.yaml` file:
 
