@@ -73,14 +73,14 @@ class av_result_parser_class:
             Returns:
                 _type_: _description_
             """    
-            parsed_result["output_place_ID"]=av_result_parser_class.get_place_ID(address_validation_result)
-            parsed_result["output_latlong"]=av_result_parser_class.get_latlong(address_validation_result)
-            parsed_result["output_formatted_address"]=av_result_parser_class.get_formatted_address(address_validation_result)
-            parsed_result["output_postal_address"]=av_result_parser_class.get_postal_address(address_validation_result)
-            parsed_result["output_verdict"]=av_result_parser_class.get_verdict(address_validation_result)            
-            parsed_result["output_address_type"]=av_result_parser_class.get_address_type(address_validation_result)            
-            parsed_result["output_usps_data"]=av_result_parser_class.get_usps_data(address_validation_result)
-            parsed_result["output_address_components"]=av_result_parser_class.get_address_components(address_validation_result)
+            parsed_result[PLACE_ID]=av_result_parser_class.get_place_ID(address_validation_result)
+            parsed_result.update(av_result_parser_class.get_latlong(address_validation_result))
+            parsed_result[FORMATTED_ADDRESS]=av_result_parser_class.get_formatted_address(address_validation_result)
+            parsed_result.update(av_result_parser_class.get_postal_address(address_validation_result))
+            parsed_result.update(av_result_parser_class.get_verdict(address_validation_result))         
+            parsed_result.update(av_result_parser_class.get_address_type(address_validation_result))            
+            parsed_result.update(av_result_parser_class.get_usps_data(address_validation_result))
+            parsed_result.update(av_result_parser_class.get_address_components(address_validation_result))
 
         if run_mode == 2:
             """_summary_:
@@ -89,14 +89,13 @@ class av_result_parser_class:
             Returns:
                 _type_: _description_
             """   
-            parsed_result["output_place_ID"]=av_result_parser_class.get_place_ID(address_validation_result)
-            parsed_result["output_latlong"]=av_result_parser_class.get_latlong(address_validation_result)
-            parsed_result["output_verdict"]=av_result_parser_class.get_verdict(address_validation_result)
-            parsed_result["output_address_components"]=av_result_parser_class.get_address_components(address_validation_result)
+            parsed_result[PLACE_ID]=av_result_parser_class.get_place_ID(address_validation_result)
+            parsed_result.update(av_result_parser_class.get_latlong(address_validation_result))
+            parsed_result.update(av_result_parser_class.get_verdict(address_validation_result))  
+            parsed_result.update(av_result_parser_class.get_address_components(address_validation_result))
 
         if run_mode == 3:
-
-           parsed_result["output_place_ID"]=av_result_parser_class.get_place_ID(address_validation_result,parsed_result)
+           parsed_result[PLACE_ID]=av_result_parser_class.get_place_ID(address_validation_result)
 
         print(" The dict with all the extracted elements is ready")
         print(parsed_result)
@@ -196,14 +195,17 @@ class av_result_parser_class:
             dict: A dict containing the verdict from the Address Validation response
         """        
         try:
-            if VERDICT in address_validation_result:
-            
-            # Check to see if result component contains verdict. Verdict contains the overall quality indicators, and should always be stored
-                if VERDICT in address_validation_result[RESULT]:
-            
-                    #Loop through the result object and add componens to the parsed result dict 
-                    for key in address_validation_result[RESULT][VERDICT].keys():
-                        return address_validation_result[RESULT][VERDICT][key]
+            #if VERDICT in address_validation_result:
+            verdict_dict = {}
+             # Check to see if result component contains verdict. Verdict contains the overall quality indicators, and should always be stored
+            print("BEFORE GETTING VERDICT")
+            if VERDICT in address_validation_result[RESULT]:
+                print("GETTING VERDICT")
+                #Loop through the result object and add componens to the parsed result dict 
+                for key in address_validation_result[RESULT][VERDICT].keys():
+                    verdict_dict[key] = address_validation_result[RESULT][VERDICT][key]
+                    #return address_validation_result[RESULT][VERDICT][key]
+                return verdict_dict
 
         except Exception as err:
             print(f"Unexpected {err=}, {type(err)=}")
@@ -250,22 +252,30 @@ class av_result_parser_class:
         try:
             # Initialize a dict to capture the response
             postal_address=dict()
+            # Check to see if the object has been returned as part of the response
             if POSTAL_ADDRESS in address_validation_result[RESULT][ADDRESS]:
-                for postal_address in address_validation_result[RESULT][ADDRESS][POSTAL_ADDRESS]:
-                    
-                    #We only want to store address lines and no other component of postal address
-                    if postal_address == ADDRESS_LINES:
-                        addressLineCounter = 1
+                #Loop though the postal address components and add them to the dictionary
+                for postal_address_component in address_validation_result[RESULT][ADDRESS][POSTAL_ADDRESS]:
+                    #The address lines are returned as a list so we will extract them in a seperate loop
+                    if postal_address_component == ADDRESS_LINES:
+                        continue
+                    postal_address[postal_address_component] = address_validation_result[RESULT][ADDRESS][POSTAL_ADDRESS][postal_address_component]
+                
+                # Check the address lines have been returned
+                if ADDRESS_LINES in address_validation_result[RESULT][ADDRESS][POSTAL_ADDRESS]:
+                    addressLines = ""
+                    iteration = 0
+                    # Loop through the address lines list, and store them as a string with a pipe seperator
+                    for address_line in address_validation_result[RESULT][ADDRESS][POSTAL_ADDRESS][ADDRESS_LINES]:
+                        if iteration == 0:
+                            addressLines = addressLines + address_line
+                        else:
+                            addressLines = addressLines + "|" + address_line
+                    # Add the address lines string to the dictionary
+                    postal_address[ADDRESS_LINES] = addressLines
 
-                        # We can only store addressLines from postal_addresses thus this code checks
-                        # address lines and returns them
-                        for al in address_validation_result[RESULT][ADDRESS][POSTAL_ADDRESS][k]:
-                            postal_address[ADDRESS_LINES + str(addressLineCounter)] = al
-                            addressLineCounter += 1
-                            continue
-                        return postal_address
-                        #FIXME: Remove this return after validating
-                        #return address_validation_result["result"]["address"]["postalAddress"][k]
+            return postal_address
+
         except Exception as err:
             print(f"Unexpected {err=}, {type(err)=}")
             print("Error in formatted address")
