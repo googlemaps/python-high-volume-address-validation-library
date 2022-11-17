@@ -271,6 +271,8 @@ class av_result_parser_class:
                             addressLines = addressLines + address_line
                         else:
                             addressLines = addressLines + "|" + address_line
+                        
+                    iteration += 1
                     # Add the address lines string to the dictionary
                     postal_address[ADDRESS_LINES] = addressLines
 
