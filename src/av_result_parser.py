@@ -223,21 +223,25 @@ class av_result_parser_class:
         Returns:
             _type_: _description_
         """       
-        try: 
+        try:
             latlong_dict={}
-            
-            if LOCATION in address_validation_result[RESULT][GEOCODE]:
-                if LATITUDE in address_validation_result[RESULT][GEOCODE][LOCATION]:
-                    latlong_dict[LATITUDE] = address_validation_result[RESULT][GEOCODE][LOCATION][LATITUDE]
-                
-                #Get the longitude from geocode
-                if LONGITUDE in address_validation_result[RESULT][GEOCODE][LOCATION]:
-                    latlong_dict[LONGITUDE] = address_validation_result[RESULT][GEOCODE][LOCATION][LONGITUDE]
+            #Init the Lat/Lng values as zero to handle cases where the API doesn't return a result. 
+            latlong_dict[LATITUDE] = 0
+            latlong_dict[LONGITUDE] = 0
+            if GEOCODE in address_validation_result[RESULT]:
+                if LOCATION in address_validation_result[RESULT][GEOCODE]:
+                    if LATITUDE in address_validation_result[RESULT][GEOCODE][LOCATION]:
+                        latlong_dict[LATITUDE] = address_validation_result[RESULT][GEOCODE][LOCATION][LATITUDE]
+                    
+                    #Get the longitude from geocode
+                    if LONGITUDE in address_validation_result[RESULT][GEOCODE][LOCATION]:
+                        latlong_dict[LONGITUDE] = address_validation_result[RESULT][GEOCODE][LOCATION][LONGITUDE]
             return latlong_dict
         except Exception as err:
             print(f"Unexpected {err=}, {type(err)=}")
-            print("No latitude or longitude found")
+            print("Error getting latitude or longitude")
             raise
+
 
     def get_postal_address(address_validation_result):
         """_summary_: Get the detailed postal address fromt the Address Validation result
@@ -332,7 +336,7 @@ class av_result_parser_class:
                                                
                     print("uspsData extracted from result is:")      
                     print(usps_data)
-                    return usps_data      
+            return usps_data      
         
         except Exception as err:
             print(f"Unexpected {err=}, {type(err)=}")
